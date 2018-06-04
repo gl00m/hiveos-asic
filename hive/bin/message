@@ -6,7 +6,7 @@ RIG_CONF="/hive-config/rig.conf"
 
 . $RIG_CONF
 
-HIVE_URL="$HIVE_HOST_URL/worker/api"
+HIVE_URL="$HIVE_HOST_URL/asic/index.php?r=hive/message"
 #LOG="/var/log/hive-agent.log"
 LOG="/dev/null"
 
@@ -69,7 +69,7 @@ echo "[`date`] > `echo $request | jq . -c`" >> $LOG
 
 response=$(echo $request | curl --insecure -L --data @- \
 --connect-timeout 7 --max-time 15 --silent \
--XPOST "${HIVE_URL}?id_rig=$RIG_ID&method=message"  -H "Content-Type: application/json")
+-XPOST "${HIVE_URL}&id_rig=$RIG_ID&method=message"  -H "Content-Type: application/json")
 
 exitcode=$?
 if [ $exitcode -ne 0 ]; then

@@ -23,6 +23,9 @@ function echo2 {
 if [ "$ASIC_MODEL" == "Antminer D3 Blissz" ]; then
 	ln -s /usr/lib/libcurl-gnutls.so.4 /usr/lib/libcurl.so.5
 fi
+if [ "$ASIC_MODEL" == "Antminer D3 Blissz v2.06 beta" ]; then
+	ln -s /usr/lib/libcurl-gnutls.so.4 /usr/lib/libcurl.so.5
+fi
 
 #Make directory in RAM
 mkdir -p /run/hive

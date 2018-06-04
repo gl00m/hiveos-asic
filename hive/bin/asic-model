@@ -16,7 +16,7 @@ elif [[ $ASIC_MODEL == "Antminer A3" ]]; then
 	LOG_PATH="/var/volatile/log/messages"
 	CONFIG_PATH="/config/cgminer.conf"
 	HASH="G"
-elif [[ $ASIC_MODEL == "Antminer D3" ]] || [[ $ASIC_MODEL == "Antminer D3 Blissz" ]]; then
+elif [[ $ASIC_MODEL == "Antminer D3" ]] || [[ $ASIC_MODEL == "Antminer D3 Blissz" ]] || [[ $ASIC_MODEL == "Antminer D3 Blissz v2.06 beta" ]]; then
 	MOUNT="config"
 	ASIC_ALGO="X11"
 	THIS_MINER_NAME="cgminer"
