@@ -27,7 +27,7 @@ ln -s /usr/lib/libcurl-gnutls.so.4 /usr/lib/libcurl.so.5
 
 If you want to install specific version or downgrade please append version as an argument to selfupgrade. E.g. 0.1-02
 ``` sh
-cd /tmp && curl -L --insecure -s -O https://raw.githubusercontent.com/minershive/hiveos-asic/master/hive/bin/selfupgrade && sh selfupgrade 0.1-02
+cd /tmp && curl -L --insecure -s -O https://raw.githubusercontent.com/gl00m/hiveos-asic/master/hive/bin/selfupgrade && sh selfupgrade 0.1-02
 ```
 
 Locally on ASIC you can run ```selfupgrade``` command. 

@@ -10,6 +10,7 @@ HELLO_OK="/tmp/.hive-hello-ok"
 
 RIG_CONF="/hive-config/rig.conf"
 WALLET_CONF="/hive-config/wallet.conf"
+ASIC_OC_CONF="/hive-config/asic-oc.conf"
 VPN_INSTALLED="/tmp/.openvpn-installed"
 mkdir -p "/hive-config"
 
@@ -24,7 +25,7 @@ mkdir -p "/hive-config"
 
 
 
-HIVE_URL="$HIVE_HOST_URL/worker/api"
+HIVE_URL="$HIVE_HOST_URL/asic/index.php?r=hive/hello"
 
 
 #will need to restart miner after
@@ -96,7 +97,7 @@ jq -n \
 )
 echo "$request" | jq -c '.'
 
-response=$(echo $request | curl --insecure -L --data @- --connect-timeout 15 --max-time 25 --silent -XPOST "${HIVE_URL}?id_rig=$RIG_ID&method=hello" -H "Content-Type: application/json")
+response=$(echo $request | curl --insecure -L --data @- --connect-timeout 15 --max-time 25 --silent -XPOST "${HIVE_URL}&id_rig=$RIG_ID&method=hello" -H "Content-Type: application/json")
 exitcode=$?
 [[ $exitcode -ne 0 ]] &&
 	echo -e "${RED}Error connecting to Hive server${NOCOLOR} $HIVE_HOST_URL" &&
@@ -139,6 +140,13 @@ if [[ ! -z "$wallet" && "$wallet" != "null" ]]; then
 	echo "$wallet" > $WALLET_CONF
 fi
 
+asic_oc=$(echo $response | jq '.result.asic_oc' --raw-output)
+if [[ ! -z $asic_oc && $asic_oc != "null" ]]; then
+	echo "Saving ASIC OC config"
+	echo "$asic_oc" > $ASIC_OC_CONF
+else
+	[[ -f $ASIC_OC_CONF ]] && rm $ASIC_OC_CONF
+fi
 
 # Post actions =================================================================
 #restartminer - restart miner on success
