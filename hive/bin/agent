@@ -117,9 +117,6 @@ miner_stats () {
 						--argjson hw_errors "$hw_errors" --argjson status "$status" \
 						--arg uptime "$uptime" \
 						'{$algo, $hs, $temp, $fan, $fan_rpm, $freq, $acn, $hw_errors, $status, $uptime}')
-				cgminer_conf=`cat /config/cgminer.conf`
-				local bitmain_reboot=$(jq '."bitmain-reboot"' <<< $cgminer_conf)
-				conf=$(jq -nc --arg reboot "$bitmain_reboot" '{$reboot}')
 			fi
 		;;
 		*)
@@ -171,7 +168,6 @@ loop () {
 	--arg passwd "$RIG_PASSWD" \
 	--arg miner "$MINER" \
 	--argjson miner_stats "$stats" \
-	--argjson miner_conf "$conf" \
 	--arg total_khs "$khs" \
 	--arg df "`df -h /$MOUNT | awk '{ print $4 }' | tail -n 1 | sed 's/%//'`" \
 	--argjson cpuavg "[`uptime | awk -F': ' '{print $2}'`]" \
@@ -179,7 +175,7 @@ loop () {
 		"method": "stats", "jsonrpc": "2.0", "id": 0,
 		"params": {
 			$rig_id, $passwd, $miner,
-			$miner_stats, $miner_conf, $total_khs,
+			$miner_stats, $total_khs,
 			$df, $cpuavg
 		}
 	}'

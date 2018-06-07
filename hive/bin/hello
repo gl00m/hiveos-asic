@@ -68,7 +68,35 @@ asic=`cat /usr/bin/compile_time | jq -R . | jq -s '{"firmware": .[0], "model": .
 #asic_chain_count=`echo /dev/fd/*/ | sed s/[^0-9]//g`
 asic_chain_count=`ls -lLtr /dev/fd/ | grep rw | wc -l`
 
-
+#get current config
+cgminer_conf=`cat /config/cgminer.conf`
+reboot=$(jq '."bitmain-reboot"' <<< $cgminer_conf)
+reboot_asic=$(jq '."bitmain-reboot-asic"' <<< $cgminer_conf)
+fan_mode=$(jq '."bitmain-fan-mode"' <<< $cgminer_conf)
+fan_pwm=$(jq '."bitmain-fan-pwm"' <<< $cgminer_conf)
+freq=$(jq '."bitmain-freq"' <<< $cgminer_conf)
+voltage=$(jq '."bitmain-voltage"' <<< $cgminer_conf)
+freq1=$(jq '."bitmain-freq1"' <<< $cgminer_conf)
+voltage1=$(jq '."bitmain-voltage1"' <<< $cgminer_conf)
+freq2=$(jq '."bitmain-freq2"' <<< $cgminer_conf)
+voltage2=$(jq '."bitmain-voltage2"' <<< $cgminer_conf)
+freq3=$(jq '."bitmain-freq3"' <<< $cgminer_conf)
+voltage3=$(jq '."bitmain-voltage3"' <<< $cgminer_conf)
+testme=$(jq '."bitmain-testme"' <<< $cgminer_conf)
+cgminer_conf=$(jq -nc \
+		--arg reboot "$reboot" \
+		--arg reboot_asic "$reboot_asic" \
+		--argjson fan_mode "$fan_mode" \
+		--argjson fan_pwm "$fan_pwm" \
+		--argjson freq "$freq" \
+		--argjson voltage "$voltage" \
+		--argjson freq1 "$freq1" \
+		--argjson voltage1 "$voltage1" \
+		--argjson freq2 "$freq2" \
+		--argjson voltage2 "$voltage2" \
+		--argjson freq3 "$freq3" \
+		--argjson voltage3 "$voltage3" \
+ '{$reboot, $reboot_asic, $fan_mode, $fan_pwm, $freq, $voltage, $freq1, $voltage1, $freq2, $voltage2, $freq3, $voltage3}')
 request=$(
 jq -n \
 --arg rig_id "$RIG_ID" \
@@ -83,6 +111,7 @@ jq -n \
 --arg asic_chain_count "$asic_chain_count" \
 --arg kernel "$kernel" \
 --arg version "$hive_version" \
+--argjson miner_conf "$cgminer_conf" \
 '{
 	"method": "hello", "jsonrpc": "2.0", "id": 0,
 	"params": {
@@ -91,7 +120,7 @@ jq -n \
 		"mb": {$manufacturer, $product},
 		"cpu": {$model, $cores, $aes},
 		$asic, $asic_chain_count,
-		$kernel, $version
+		$kernel, $version, $miner_conf
 	}
 }'
 )
