@@ -146,7 +146,7 @@ function check_second_miner {
 
 
 ########################################################################################################################
-
+hello
 case $1 in
 	start)
 		start
@@ -159,7 +159,6 @@ case $1 in
 		echo -e "${YELLOW}Restarting miner${NOCOLOR}" #can be different on miner change
 		stop
 		#need some time to finish it seems
-		sleep 5
 		start
 	;;
 	config)
