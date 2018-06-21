@@ -336,7 +336,13 @@ do_command () {
 				echo "$wallet" > $WALLET_CONF && sync
 
 				justwrite=
-				oc_if_changed
+				asic_oc=$(echo $response | jq '.result.asic_oc' --raw-output)
+				if [[ ! -z $asic_oc && $asic_oc != "null" ]]; then
+					echo "Saving ASIC OC config"
+					echo "$asic_oc" > $ASIC_OC_CONF
+				else
+					[[ -f $ASIC_OC_CONF ]] && rm $ASIC_OC_CONF
+				fi
 
 				miner restart
 				[[ $? == 0 ]] && message ok "Wallet changed, miner restarted" 120 || message warn "Error restarting miner"
