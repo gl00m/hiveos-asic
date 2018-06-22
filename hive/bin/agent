@@ -313,7 +313,7 @@ do_command () {
 				else
 					[[ -f $ASIC_OC_CONF ]] && rm $ASIC_OC_CONF
 				fi
-
+				/hive/bin/asicminer-config
 
 				# Final actions ---------------------------------------------------------
 				if [[ "$justwrite" != 1 ]]; then
@@ -343,7 +343,7 @@ do_command () {
 				else
 					[[ -f $ASIC_OC_CONF ]] && rm $ASIC_OC_CONF
 				fi
-
+				/hive/bin/asicminer-config
 				miner restart
 				[[ $? == 0 ]] && message ok "Wallet changed, miner restarted" 120 || message warn "Error restarting miner"
 			else
