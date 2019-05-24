@@ -56,6 +56,7 @@ function start() {
 	echo -e "Starting ${CYAN}$THIS_MINER_NAME${NOCOLOR}"
 	config-gen
 	#nohup bmminer --version-file /usr/bin/compile_time --api-listen --default-config /config/bmminer.conf > /dev/null 2>&1 &
+    chmod +x /usr/bin/cgminer
 	nohup /etc/init.d/$THIS_MINER_NAME.sh start > /dev/null 2>&1 &
 	echo "";
 }
@@ -64,6 +65,7 @@ function start() {
 function stop() {
 	echo -e "Stopping ${CYAN}$MINER${NOCOLOR}"
 	/etc/init.d/$THIS_MINER_NAME.sh stop
+    chmod -x /usr/bin/cgminer
 }
 
 
@@ -160,6 +162,14 @@ case $1 in
 		stop
 		#need some time to finish it seems
 		start
+	;;
+	restop)
+		echo -e "${YELLOW}Restoping miner${NOCOLOR}" #can be different on miner change                          
+                stop                                                                                                     
+                #need some time to finish it seems                                                                       
+                start
+		sleep 10
+		stop
 	;;
 	config)
 		config
